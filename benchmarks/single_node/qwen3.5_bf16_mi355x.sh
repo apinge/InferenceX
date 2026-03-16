@@ -15,7 +15,7 @@ if [[ -n "$SLURM_JOB_ID" ]]; then
   echo "JOB $SLURM_JOB_ID running on $SLURMD_NODENAME"
 fi
 
-hf download "$MODEL"
+# hf download "$MODEL"
 
 SERVER_LOG=/workspace/server.log
 PORT=${PORT:-8888}
