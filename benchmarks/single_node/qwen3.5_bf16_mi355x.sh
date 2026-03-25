@@ -22,7 +22,8 @@ PORT=${PORT:-8888}
 
 # Start GPU monitoring (power, temperature, clocks every second)
 start_gpu_monitor
-
+export ROCM_QUICK_REDUCE_QUANTIZATION=INT4
+export OPTFLAG="w8a8_gemm,moe"
 python3 -m sglang.launch_server \
     --attention-backend triton \
     --model-path $MODEL \
