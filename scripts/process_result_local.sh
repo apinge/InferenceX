@@ -60,6 +60,21 @@ process_one() {
     CONC="${BASH_REMATCH[1]}"
   fi
 
+  # Extract TP/EP/DPA settings from filename (e.g. ..._sglang_tp4-ep1-dpaFalse_...) instead of relying on environment variables
+  local TP_FROM_NAME EP_FROM_NAME DPA_FROM_NAME
+  TP_FROM_NAME=""
+  EP_FROM_NAME=""
+  DPA_FROM_NAME=""
+  if [[ "$base" =~ sglang_tp([0-9]+)- ]]; then
+    TP_FROM_NAME="${BASH_REMATCH[1]}"
+  fi
+  if [[ "$base" =~ -ep([0-9]+)- ]]; then
+    EP_FROM_NAME="${BASH_REMATCH[1]}"
+  fi
+  if [[ "$base" =~ -dpa(True|False)_ ]]; then
+    DPA_FROM_NAME="${BASH_REMATCH[1],,}"
+  fi
+
   local IMAGE="rocm/sgl-dev:v0.5.9-rocm720-mi35x-20260315"
 
   export RESULT_FILENAME="$base"
@@ -70,13 +85,13 @@ process_one() {
   export DISAGG="${DISAGG:-false}"
   export MODEL_PREFIX="${MODEL_PREFIX:-qwen3.5}"
   export IMAGE
-  export TP="${TP:-8}"
-  export EP_SIZE="${EP_SIZE:-1}"
-  export DP_ATTENTION="${DP_ATTENTION:-false}"
+  export TP="${TP_FROM_NAME:-${TP:-8}}"
+  export EP_SIZE="${EP_FROM_NAME:-${EP_SIZE:-1}}"
+  export DP_ATTENTION="${DPA_FROM_NAME:-${DP_ATTENTION:-false}}"
   export ISL
   export OSL
 
-  echo "[process_result] $json_file -> agg_${base}.json (ISL=$ISL OSL=$OSL PRECISION=$PRECISION)"
+  echo "[process_result] $json_file -> agg_${base}.json (ISL=$ISL OSL=$OSL PRECISION=$PRECISION TP=$TP EP=$EP_SIZE)"
   ( cd "$dir" && python3 "$REPO_ROOT/utils/process_result.py" ) || res=$?
   return $res
 }
