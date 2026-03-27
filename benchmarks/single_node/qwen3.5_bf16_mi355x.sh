@@ -29,6 +29,7 @@ python3 -m sglang.launch_server \
     --model-path $MODEL \
     --host=0.0.0.0 \
     --port $PORT \
+    --disable-radix-cache \
     --tensor-parallel-size $TP \
     --trust-remote-code \
     --mem-fraction-static 0.8 > $SERVER_LOG 2>&1 &
