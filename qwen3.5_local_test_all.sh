@@ -12,6 +12,7 @@
 
 set -e
 
+export MODEL="${MODEL:-/models/Qwen3.5-397B-A17B-FP8}"
 
 # (ISL, OSL) pairs: 1k1k, 8k1k
 SEQ_CONFIGS=(1024:1024 8192:1024)
