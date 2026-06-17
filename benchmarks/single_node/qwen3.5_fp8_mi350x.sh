@@ -41,7 +41,7 @@ python3 -m sglang.launch_server \
     --reasoning-parser qwen3 \
     --attention-backend aiter \
     --mm-attention-backend aiter_attn \
-    --max-running-requests 64 \
+    --max-running-requests 128 \
     --disable-radix-cache \
     --kv-cache-dtype fp8_e4m3 \
     --disable-custom-all-reduce > $SERVER_LOG 2>&1 &
